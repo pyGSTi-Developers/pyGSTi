@@ -1116,8 +1116,9 @@ class OpModel(Model):
             self._paramvec = self._model_paramvec_to_ops_paramvec(self._paramvec)
         self._param_interposer = interposer
         if interposer is not None:  # add new interposer
-            self._clean_paramvec()
             self._paramvec = self._ops_paramvec_to_model_paramvec(self._paramvec)
+            self._need_to_rebuild = True
+            self._clean_paramvec()
 
     def _model_paramvec_to_ops_paramvec(self, v):
         return self.param_interposer.model_paramvec_to_ops_paramvec(v) \
@@ -1979,7 +1980,6 @@ class OpModel(Model):
                                      norm_order=norm_order)
 
         if reparameterize:
-
             self.param_interposer = self._add_reparameterization(
                 primitive_op_labels + primitive_prep_labels + primitive_povm_labels,
                 self.fogi_store.fogi_directions.toarray(),  # DENSE now (leave sparse in FUTURE?)
