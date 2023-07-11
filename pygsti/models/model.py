@@ -651,6 +651,7 @@ class OpModel(Model):
         #import inspect, pprint
         #pprint.pprint([(x.filename,x.lineno,x.function) for x in inspect.stack()[0:7]])
 
+
         if self._need_to_rebuild:
             self._rebuild_paramvec()
             self._need_to_rebuild = False
@@ -1978,6 +1979,7 @@ class OpModel(Model):
                                      norm_order=norm_order)
 
         if reparameterize:
+
             self.param_interposer = self._add_reparameterization(
                 primitive_op_labels + primitive_prep_labels + primitive_povm_labels,
                 self.fogi_store.fogi_directions.toarray(),  # DENSE now (leave sparse in FUTURE?)
