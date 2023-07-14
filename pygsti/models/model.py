@@ -888,7 +888,12 @@ class OpModel(Model):
             existing elements of _paramvec (use _update_paramvec for this)"""
         w = self._model_paramvec_to_ops_paramvec(self._paramvec)
         Np = len(w)  # NOT self.num_params since the latter calls us!
-        wl = self._paramlbls
+        
+        wl = []
+        for _, obj in self._iter_parameterized_objs():
+            wl.extend(obj.parameter_labels)
+        wl = _np.asarray(wl, dtype=object)
+        #wl = self._paramlbls
         wb = self._param_bounds if (self._param_bounds is not None) else _default_param_bounds(Np)
         #NOTE: interposer doesn't quite work with parameter bounds yet, as we need to convert "model"
         # bounds to "ops" bounds like we do the parameter vector.  Need something like:

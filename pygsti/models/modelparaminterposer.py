@@ -75,22 +75,12 @@ class LinearInterposer(ModelParamsInterposer):
 
     def ops_paramlbls_to_model_paramlbls(self, wl):
         # This can and should be improved later - particularly this will be awful when labels (els of wl) are tuples.
+
         ret = []
         for irow in range(self.inv_transform_matrix.shape[0]):
-            #lbl = ' + '.join(["%g%s" % (coeff, str(lbl)) for coeff, lbl in zip(self.inv_transform_matrix[irow, :], wl) if _np.abs(coeff) > 1e-10])
-            #ret.append(lbl)
-
-            temp = []
-
-            for coeff, lbl in zip(self.inv_transform_matrix[irow, :], wl):
-                if _np.abs(coeff) > 1e-10:
-                    temp.append("%g%s" % (coeff, str(lbl)))
-            lbl = ' + '.join(temp)
+            lbl = ' + '.join(["%g %s" % (coeff, str(lbl)) for coeff, lbl in zip(self.inv_transform_matrix[irow, :], wl) if _np.abs(coeff) > 1e-10])
             ret.append(lbl)
-
         return ret
-
-
 
     def deriv_op_params_wrt_model_params(self):
         return self.transform_matrix
