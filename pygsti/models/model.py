@@ -889,11 +889,6 @@ class OpModel(Model):
         w = self._model_paramvec_to_ops_paramvec(self._paramvec)
         Np = len(w)  # NOT self.num_params since the latter calls us!
         
-        wl = []
-        for _, obj in self._iter_parameterized_objs():
-            wl.extend(obj.parameter_labels)
-        wl = _np.asarray(wl, dtype=object)
-        #wl = self._paramlbls
         wb = self._param_bounds if (self._param_bounds is not None) else _default_param_bounds(Np)
         #NOTE: interposer doesn't quite work with parameter bounds yet, as we need to convert "model"
         # bounds to "ops" bounds like we do the parameter vector.  Need something like:
@@ -928,7 +923,6 @@ class OpModel(Model):
                     for _, o in self._iter_parameterized_objs():
                         o.shift_gpindices(insertion_point, num_new_params, self)
                     w = _np.insert(w, insertion_point, _np.empty(num_new_params, 'd'))
-                    wl = _np.insert(wl, insertion_point, _np.empty(num_new_params, dtype=object))
                     wb = _np.insert(wb, insertion_point, _default_param_bounds(num_new_params), axis=0)
 
                 # Now allocate (actually updates obj's gpindices).  May be necessary even if
@@ -961,7 +955,6 @@ class OpModel(Model):
                                                                    inds < added_indices.stop)]
 
                     w = _np.concatenate((w, _np.empty(M + 1 - L, 'd')), axis=0)  # [v.resize(M+1) doesn't work]
-                    wl = _np.concatenate((wl, _np.empty(M + 1 - L, dtype=object)), axis=0)
                     wb = _np.concatenate((wb, _np.empty((M + 1 - L, 2), 'd')), axis=0)
                     if debug: print("DEBUG:    --> added %d new params" % (M + 1 - L))
                 else:
@@ -984,7 +977,6 @@ class OpModel(Model):
             if newly_added_indices is not None:
                 obj_paramlbls = _np.empty(obj.num_params, dtype=object)
                 obj_paramlbls[:] = [(lbl, obj_plbl) for obj_plbl in obj.parameter_labels]
-                wl[newly_added_indices] = obj_paramlbls[_gm._decompose_gpindices(obj.gpindices, newly_added_indices)]
 
         #Step 2: remove any unused indices from paramvec and shift accordingly
         used_gpindices = set()
@@ -1013,9 +1005,8 @@ class OpModel(Model):
         if debug: print("Indices to remove = ", indices_to_remove, " of ", Np)
 
         if len(indices_to_remove) > 0:
-            #if debug: print("DEBUG: Removing %d params:"  % len(indices_to_remove), indices_to_remove)
+            if debug: print("DEBUG: Removing %d params:"  % len(indices_to_remove), indices_to_remove)
             w = _np.delete(w, indices_to_remove)
-            wl = _np.delete(wl, indices_to_remove)
             wb = _np.delete(wb, indices_to_remove, axis=0)
             def _get_shift(j): return _bisect.bisect_left(indices_to_remove, j)
             memo = set()  # keep track of which object's gpindices have been set
@@ -1032,6 +1023,11 @@ class OpModel(Model):
                         new_inds.append(i - _get_shift(i))
                     new_inds = _np.array(new_inds, _np.int64)
                 obj.set_gpindices(new_inds, self, memo)
+
+        wl = []
+        for obj_label, obj in self._iter_parameterized_objs():
+            wl.extend(zip(_itertools.repeat(obj_label.__str__(), len(obj.parameter_labels)), obj.parameter_labels))
+        wl = _np.asarray(wl, dtype=object)
 
         self._paramvec = self._ops_paramvec_to_model_paramvec(w)
         self._paramlbls = self._ops_paramlbls_to_model_paramlbls(wl)
