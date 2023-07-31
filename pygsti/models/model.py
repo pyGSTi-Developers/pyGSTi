@@ -1026,7 +1026,14 @@ class OpModel(Model):
 
         wl = []
         for obj_label, obj in self._iter_parameterized_objs():
-            wl.extend(zip(_itertools.repeat(obj_label.__str__(), len(obj.parameter_labels)), obj.parameter_labels))
+
+            print('labels: ', obj.parameter_labels)
+            for param_label in obj.parameter_labels:
+
+                print('label:', param_label)
+                wl.append(obj_label.__str__ ()+ ': ' + param_label)
+                print(obj_label.__str__ ()+ ': ' + param_label)
+            #wl.extend(zip(_itertools.repeat(obj_label.__str__(), len(obj.parameter_labels)), obj.parameter_labels))
         wl = _np.asarray(wl, dtype=object)
 
         self._paramvec = self._ops_paramvec_to_model_paramvec(w)
