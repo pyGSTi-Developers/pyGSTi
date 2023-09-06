@@ -78,7 +78,7 @@ class LinearInterposer(ModelParamsInterposer):
 
         ret = []
         for irow in range(self.inv_transform_matrix.shape[0]):
-            lbl = ' + '.join(["%g %s" % (coeff, str(lbl)) for coeff, lbl in zip(self.inv_transform_matrix[irow, :], wl) if _np.abs(coeff) > 1e-10])
+            lbl = ' + '.join(["%g %s" % (coeff, str(lbl[0]) +':' + str(lbl[1])) for coeff, lbl in zip(self.inv_transform_matrix[irow, :], wl) if _np.abs(coeff) > 1e-10])
             ret.append(lbl)
         return ret
 

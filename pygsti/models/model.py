@@ -811,7 +811,7 @@ class OpModel(Model):
 
     def uncollect_parameters(self, param_to_uncollect):
         """
-        Updates this model's parameters so that a common paramter becomes independent parameters.
+        Updates this model's parameters so that a common parameter becomes independent parameters.
 
         The model's parameterization is modified so that each usage of the given parameter
         in the model's parameterized operations is promoted to being a new independent
@@ -961,7 +961,6 @@ class OpModel(Model):
                     newly_added_indices = None
                 #if M >= 0:  # M == -1 signifies this object has no parameters, so we'll just leave `off` alone
                 #    off = M + 1
-
             #Update max_index_processed_so_far
             max_gpindex = (obj.gpindices.stop - 1) if isinstance(obj.gpindices, slice) else max(obj.gpindices)
             max_index_processed_so_far = max(max_index_processed_so_far, max_gpindex)
@@ -1023,19 +1022,13 @@ class OpModel(Model):
                         new_inds.append(i - _get_shift(i))
                     new_inds = _np.array(new_inds, _np.int64)
                 obj.set_gpindices(new_inds, self, memo)
-
         wl = []
         for obj_label, obj in self._iter_parameterized_objs():
 
-            print('labels: ', obj.parameter_labels)
             for param_label in obj.parameter_labels:
 
-                print('label:', param_label)
-                wl.append(obj_label.__str__ ()+ ': ' + param_label)
-                print(obj_label.__str__ ()+ ': ' + param_label)
-            #wl.extend(zip(_itertools.repeat(obj_label.__str__(), len(obj.parameter_labels)), obj.parameter_labels))
-        wl = _np.asarray(wl, dtype=object)
-
+                wl.append((obj_label.__str__ (), param_label))
+        wl = _np.fromiter(wl, dtype=object,)
         self._paramvec = self._ops_paramvec_to_model_paramvec(w)
         self._paramlbls = self._ops_paramlbls_to_model_paramlbls(wl)
         self._param_bounds = wb if _param_bounds_are_nontrivial(wb) else None
