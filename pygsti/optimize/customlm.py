@@ -122,9 +122,23 @@ class CustomLMOptimizer(Optimizer):
 
     tol : float or dict, optional
         The tolerance, specified as a single float or as a dict
-        with keys `{'relx', 'relf', 'jac', 'maxdx'}`.  A single
-        float sets the `'relf'` and `'jac'` elemments and leaves
-        the others at their default values.
+        with keys `{'relx', 'relf', 'jac', 'maxdx', 'f'}`.  A single
+        float sets the `'relf'` and `'jac'` elements and leaves
+        the others at their default values. These keys correspond to:
+
+        -'relx': Tolerance on the relative value of `|x|`, so that if
+          `d(|x|)/|x| < rel_xtol` then mark converged.
+        -'relf': Tolerance on the relative reduction in `F^2`, that is, if
+          `d(F^2)/F^2 < rel_ftol` then mark converged.
+        -'jac': Tolerance for jacobian norm, namely if `infn(dot(J.T,f)) < jac_norm_tol`
+          then mark converged, where `infn` is the infinity-norm and
+          `f = obj_fn(x)`.
+        -'maxdx': If not None, impose a limit on the magnitude of the step, so that
+          `|dx|^2 < max_dx_scale^2 * len(dx)` (so elements of `dx` should be,
+          roughly, less than `max_dx_scale`).
+        - 'f': Tolerance for `F^2` where `F = `norm( sum(obj_fn(x)**2) )` is the
+          least-squares residual.  If `F**2 < f_norm2_tol`, then mark converged.
+
 
     fditer : int optional
         Internally compute the Jacobian using a finite-difference method
@@ -407,7 +421,7 @@ def custom_leastsq(obj_fn, jac_fn, x0, f_norm2_tol=1e-6, jac_norm_tol=1e-6,
         Initial evaluation point.
 
     f_norm2_tol : float, optional
-        Tolerace for `F^2` where `F = `norm( sum(obj_fn(x)**2) )` is the
+        Tolerance for `F^2` where `F = `norm( sum(obj_fn(x)**2) )` is the
         least-squares residual.  If `F**2 < f_norm2_tol`, then mark converged.
 
     jac_norm_tol : float, optional
