@@ -193,6 +193,29 @@ License
 -------
 PyGSTi is licensed under the [Apache License Version 2.0](https://github.com/pyGSTio/pyGSTi/blob/master/LICENSE).
 
+Citing
+------
+
+If you use pyGSTi in published work, consider citing [this paper](https://iopscience.iop.org/article/10.1088/2058-9565/ab8aa4).
+
+```
+@ARTICLE{Nielsen2020,
+  title     = "Probing quantum processor performance with {py{GST}i}",
+  author    = "Nielsen, Erik and Rudinger, Kenneth and Proctor, Timothy and
+               Russo, Antonio and Young, Kevin and Blume-Kohout, Robin",
+  journal   = "Quantum Sci. Technol.",
+  publisher = "IOP Publishing",
+  volume    =  5,
+  number    =  4,
+  pages     = "044002",
+  month     =  jul,
+  year      =  2020,
+  url       = "https://iopscience.iop.org/article/10.1088/2058-9565/ab8aa4",
+  copyright = "http://iopscience.iop.org/page/copyright",
+  issn      = "2058-9565",
+  doi       = "10.1088/2058-9565/ab8aa4"
+}
+```
 
 Questions?
 ----------
