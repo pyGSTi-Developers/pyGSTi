@@ -18,8 +18,8 @@ jobs:
     strategy:
       # fail-fast: true is OK here
       matrix:
-        os: [ubuntu-latest, windows-latest] # No Mac
-        python-version: [3.8, '3.11'] # Only extremal Python versions
+        os: [macos-latest, ubuntu-latest, windows-latest] # TEMP: Try latest mac again # No Mac
+        python-version: [3.9, '3.12'] # Only extremal Python versions
     uses: ./.github/workflows/reuseable-main.yml
     name: Run pyGSTi tests
     with:

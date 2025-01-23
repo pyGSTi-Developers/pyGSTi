@@ -131,7 +131,7 @@ class build_ext_compiler_check(build_ext):
 
 def setup_with_extensions(extensions=None):
     setup(
-        name='pyGSTi',
+        name='pygsti',
         use_scm_version=custom_version,
         cmdclass={'build_ext': build_ext_compiler_check},
         description='A python implementation of Gate Set Tomography',
@@ -277,10 +277,10 @@ def setup_with_extensions(extensions=None):
             'networkx'
         ],
         extras_require=extras,
-        python_requires='>=3.8',
+        python_requires='>=3.9',
         platforms=["any"],
         url='http://www.pygsti.info',
-        download_url='https://github.com/pyGSTio/pyGSTi/tarball/master',
+        download_url='https://github.com/sandialabs/pyGSTi/tarball/master',
         keywords=[
             'pygsti',
             'tomography',
