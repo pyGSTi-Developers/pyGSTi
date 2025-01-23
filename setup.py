@@ -164,6 +164,7 @@ def setup_with_extensions(extensions=None):
             'pygsti.extras.interpygate',
             'pygsti.extras.crosstalk',
             'pygsti.extras.devices',
+            'pygsti.extras.paritybenchmarking',
             'pygsti.forwardsims',
             'pygsti.io',
             'pygsti.layouts',
